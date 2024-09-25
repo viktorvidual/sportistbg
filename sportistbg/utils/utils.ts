@@ -10,7 +10,15 @@ import { redirect } from "next/navigation";
 export function encodedRedirect(
   type: "error" | "success",
   path: string,
-  message: string,
+  message: string
 ) {
   return redirect(`${path}?${type}=${encodeURIComponent(message)}`);
 }
+
+export const generateEncodedRedirect = (
+  type: "error" | "success",
+  path: string,
+  message: string
+): string => {
+  return `${path}?${type}=${encodeURIComponent(message)}`;
+};
