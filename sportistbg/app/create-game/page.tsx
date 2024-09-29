@@ -2,8 +2,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { SubmitButton } from "@/components/submit-button";
 import { createGameAction } from "@/app/actions";
+import { Message, FormMessage } from "@/components/form-message";
 
-export default function Page() {
+export default function Page({ searchParams }: { searchParams: Message }) {
   return (
     <main>
       <h1>Create Game</h1>
@@ -11,8 +12,6 @@ export default function Page() {
         <div className="flex flex-col gap-2 [&>input]:mb-3 mt-8">
           <Label htmlFor="name">Name</Label>
           <Input name="name" placeholder="Game name" required />
-          <Label htmlFor="description">Description</Label>
-          <Input name="description" placeholder="Game description (optional)" />
           <Label htmlFor="date">Date</Label>
           <Input type="date" name="date" required />
           <Label htmlFor="time">Time</Label>
@@ -33,6 +32,7 @@ export default function Page() {
           >
             Create Game
           </SubmitButton>
+          <FormMessage message={searchParams} />
         </div>
       </form>
     </main>

@@ -1,9 +1,10 @@
 "use server";
-
 import { encodedRedirect } from "@/utils/utils";
 import { createClient } from "@/utils/supabase/server";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { DB_TABLES } from "./constants";
+import moment from "moment";
 
 export const signUpAction = async (formData: FormData) => {
   const email = formData.get("email")?.toString();
@@ -130,6 +131,32 @@ export const signOutAction = async () => {
 };
 
 export const createGameAction = async (formData: FormData) => {
-  console.log("Creating game...");
-  console.log(formData);
+  const name = formData.get("name") as string;
+  const location = formData.get("location") as string;
+  const maxPlayers = formData.get("maxPlayers") as string;
+  const supabase = createClient();
+
+  const date = formData.get("date") as string;
+  const time = formData.get("time") as string;
+
+  const dateTime = moment(`${date} ${time}`, "YYYY-MM-DD HH:mm");
+
+  const body = {
+    name,
+    scheduled_at: dateTime.toISOString(),
+    location,
+    max_players: parseInt(maxPlayers),
+  };
+
+  const { data, error } = await supabase.from(DB_TABLES.events).insert([body]).select();
+
+  if (error) {
+    console.error("Supabase Insert Error:", error);
+    console.error("Error Details:", error.message);
+    return encodedRedirect("error", "/create-game", "Could not create game");
+  } else {
+    console.log("game created", data);
+  }
+
+  return encodedRedirect("success", "/create-game", "Game created");
 };

@@ -66,12 +66,11 @@ export default async function AuthButton() {
     <div className="flex gap-2">
       <Button asChild size="sm" variant={"outline"}>
         <Link
-          // href={generateEncodedRedirect(
-          //   "error",
-          //   "/sign-up",
-          //   "Please sign up to create a game"
-          // )}
-          href="/create-game"
+          href={generateEncodedRedirect(
+            "error",
+            "/sign-up",
+            "Please sign up to create a game"
+          )}
         >
           Create a Game
         </Link>
