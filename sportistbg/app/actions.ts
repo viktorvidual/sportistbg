@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import { DB_TABLES } from "./constants";
 import moment from "moment";
 import camelize from "camelize-ts";
-import { EventType } from "./protected/page";
+
 
 export const signUpAction = async (formData: FormData) => {
   const email = formData.get("email")?.toString();

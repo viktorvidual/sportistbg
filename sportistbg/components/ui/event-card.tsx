@@ -14,9 +14,7 @@ export const EventCard = ({
   eventName = "10 vs 10",
   location = "Spartak Varna",
 }: EventCardProps) => {
-  console.log(scheduledAt);
-
-  const eventDate = moment(scheduledAt).format("MMMM Do YYYY, h:mm:ss a");
+ const eventDate = moment(scheduledAt).format("MMMM Do YYYY, h:mm:ss a");
 
   return (
     <div className="max-w-sm rounded overflow-hidden shadow-lg bg-white">
