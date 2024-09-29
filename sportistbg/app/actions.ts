@@ -5,6 +5,8 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { DB_TABLES } from "./constants";
 import moment from "moment";
+import camelize from "camelize-ts";
+import { EventType } from "./protected/page";
 
 export const signUpAction = async (formData: FormData) => {
   const email = formData.get("email")?.toString();
@@ -148,7 +150,10 @@ export const createGameAction = async (formData: FormData) => {
     max_players: parseInt(maxPlayers),
   };
 
-  const { data, error } = await supabase.from(DB_TABLES.events).insert([body]).select();
+  const { data, error } = await supabase
+    .from(DB_TABLES.events)
+    .insert([body])
+    .select();
 
   if (error) {
     console.error("Supabase Insert Error:", error);
@@ -159,4 +164,17 @@ export const createGameAction = async (formData: FormData) => {
   }
 
   return encodedRedirect("success", "/create-game", "Game created");
+};
+
+export const fetchEvents = async () => {
+  const supabase = createClient();
+  const { data, error } = await supabase.from(DB_TABLES.events).select();
+
+  if (error) {
+    console.error("Supabase Fetch Error:", error);
+    console.error("Error Details:", error.message);
+    return { error: "Could not fetch events" };
+  }
+
+  return { data: camelize(data) };
 };
