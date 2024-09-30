@@ -7,6 +7,7 @@ import { createClient } from "@/utils/supabase/server";
 import { generateEncodedRedirect } from "@/utils/utils";
 
 import AuthDropdown from "./auth-dropdown";
+import { routes } from "@/lib/constants";
 
 export default async function AuthButton() {
   const {
@@ -52,7 +53,7 @@ export default async function AuthButton() {
   return user ? (
     <div className="flex items-center gap-4">
       <Button asChild size="sm" variant={"outline"}>
-        <Link href="/create-game">Create a Game</Link>
+        <Link href={routes.createGane}>Create a Game</Link>
       </Button>
       <AuthDropdown />
     </div>

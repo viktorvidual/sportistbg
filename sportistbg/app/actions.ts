@@ -3,9 +3,10 @@ import { encodedRedirect } from "@/utils/utils";
 import { createClient } from "@/utils/supabase/server";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { DB_TABLES } from "./constants";
+import { DB_TABLES } from "../lib/constants";
 import moment from "moment";
 import camelize from "camelize-ts";
+import { Event } from "./protected/page";
 
 export const signUpAction = async (formData: FormData) => {
   const email = formData.get("email")?.toString();
@@ -173,6 +174,28 @@ export const fetchEvents = async () => {
     console.error("Supabase Fetch Error:", error);
     console.error("Error Details:", error.message);
     return { error: "Could not fetch events" };
+  }
+
+  return { data: camelize(data) };
+};
+
+export const fetchEvent = async (
+  id: string
+): Promise<{
+  data?: Event[];
+  error?: string;
+}> => {
+  const supabase = createClient();
+
+  const { data, error } = await supabase
+    .from(DB_TABLES.events)
+    .select()
+    .eq("id", id);
+
+  if (error) {
+    console.error("Supabase Fetch Error:", error);
+    console.error("Error Details:", error.message);
+    return { error: "Could not fetch event" };
   }
 
   return { data: camelize(data) };

@@ -6,7 +6,7 @@ import { Camelize } from "camelize-ts";
 
 //this has to be redone and included in types file
 export type EventResult = {
-  id: string;
+  id: number;
   name: string;
   location: string;
   image?: string;
@@ -36,6 +36,7 @@ export default async function ProtectedPage() {
           <div className="grid gap-12 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
             {eventResults.map((event: Event) => (
               <EventCard
+                id={event.id}
                 eventName={event.name}
                 location={event.location}
                 key={event.id}
