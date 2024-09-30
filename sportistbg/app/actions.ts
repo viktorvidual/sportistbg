@@ -7,7 +7,6 @@ import { DB_TABLES } from "./constants";
 import moment from "moment";
 import camelize from "camelize-ts";
 
-
 export const signUpAction = async (formData: FormData) => {
   const email = formData.get("email")?.toString();
   const password = formData.get("password")?.toString();

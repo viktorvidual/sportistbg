@@ -7,7 +7,7 @@ import { Message, FormMessage } from "@/components/form-message";
 export default function Page({ searchParams }: { searchParams: Message }) {
   return (
     <main>
-      <h1>Create Game</h1>
+      <h1 className="text-2xl">Create a Game</h1>
       <form className="flex-1 flex flex-col min-w-64">
         <div className="flex flex-col gap-2 [&>input]:mb-3 mt-8">
           <Label htmlFor="name">Name</Label>
