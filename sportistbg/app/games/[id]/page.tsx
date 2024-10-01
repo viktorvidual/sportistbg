@@ -1,12 +1,13 @@
 import { fetchEvent } from "@/app/actions";
+import { notFound } from "next/navigation";
 
 export default async function Page({ params }: { params: { id: string } }) {
   const id = params.id;
 
   const { data } = await fetchEvent(id);
 
-  if (!data) {
-    return <p>Event not found</p>;
+  if (data?.length === 0) {
+    notFound();
   }
 
   const [event] = data;
