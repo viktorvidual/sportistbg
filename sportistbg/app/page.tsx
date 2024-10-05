@@ -5,7 +5,7 @@ import { MainContainer } from "@/components/ui/mainContainer";
 export default async function Index() {
   return (
     <>
-      {/* <Hero /> */}
+      <Hero />
       <MainContainer>
         <AllGames />
       </MainContainer>
