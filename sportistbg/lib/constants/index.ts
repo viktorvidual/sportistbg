@@ -1,8 +1,8 @@
-export const DB_TABLES = { 
-    "events": "Events", 
-}
+export const DB_TABLES = {
+  events: "Events",
+};
 
-export const routes = { 
-    "createGane": "/games/create",
-    "gameDetails": "/games",
-}
+export const ROUTES = {
+  createGane: "/games/create",
+  gameDetails: "/games",
+};

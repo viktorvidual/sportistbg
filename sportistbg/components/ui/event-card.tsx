@@ -1,7 +1,7 @@
 import React from "react";
 import moment from "moment";
 import Link from "next/link";
-import { routes } from "@/lib/constants";
+import { ROUTES } from "@/lib/constants";
 
 type EventCardProps = {
   id: number;
@@ -19,7 +19,7 @@ export const EventCard = ({
   location = "Spartak Varna",
 }: EventCardProps) => {
   const eventDate = moment(scheduledAt).format("MMMM Do YYYY, h:mm:ss a");
-  const href = `${routes.gameDetails}/${id}`;
+  const href = `${ROUTES.gameDetails}/${id}`;
 
   return (
     <Link href={href}>

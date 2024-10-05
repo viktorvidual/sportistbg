@@ -3,8 +3,30 @@ import { Label } from "@/components/ui/label";
 import { SubmitButton } from "@/components/submit-button";
 import { createGameAction } from "@/app/actions";
 import { Message, FormMessage } from "@/components/form-message";
+import { createClient } from "@/utils/supabase/server";
+import { redirect } from "next/navigation";
+import { generateEncodedRedirect } from "@/utils/utils";
 
-export default function Page({ searchParams }: { searchParams: Message }) {
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Message;
+}) {
+  const supabase = createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    const path = generateEncodedRedirect(
+      "error",
+      "/sign-in",
+      "You must be signed in to create a game."
+    );
+    return redirect(path);
+  }
+
   return (
     <main>
       <h1 className="text-2xl">Create a Game</h1>
