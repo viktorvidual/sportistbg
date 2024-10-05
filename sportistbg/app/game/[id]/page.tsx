@@ -3,7 +3,6 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import { createClient } from "@/utils/supabase/server";
-import { Button } from "@/components/ui/button";
 import { deleteGameAction } from "@/app/actions";
 import ConfirmActionModal from "@/components/confirm-action-modal";
 
@@ -32,7 +31,7 @@ export default async function Page({ params }: { params: { id: string } }) {
       <div className="block md:hidden">
         <iframe
           width="100%"
-          height="350"
+          height="300"
           loading="lazy"
           src={
             "https://www.google.com/maps/embed/v1/place?q=place_id:ChIJ7SxO9XJUpEARZg68Is2xLaM&key=" +
@@ -57,6 +56,7 @@ export default async function Page({ params }: { params: { id: string } }) {
           triggerText="Delete Game"
           title="Are you sure that you would like to delete this game?"
           onConfirm={deleteGameWithId}
+          loadingText="Deleting Game"
         />
         <Link
           href=""
