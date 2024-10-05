@@ -7,6 +7,7 @@ import { DB_TABLES } from "../lib/constants";
 import moment from "moment";
 import camelize from "camelize-ts";
 import { Event } from "./protected/page";
+import { ROUTES } from "../lib/constants";
 
 export const signUpAction = async (formData: FormData) => {
   const email = formData.get("email")?.toString();
@@ -158,12 +159,16 @@ export const createGameAction = async (formData: FormData) => {
   if (error) {
     console.error("Supabase Insert Error:", error);
     console.error("Error Details:", error.message);
-    return encodedRedirect("error", "/create-game", "Could not create game");
+    return encodedRedirect(
+      "error",
+      "/protected/create-game",
+      "Could not create game"
+    );
   } else {
     console.log("game created", data);
   }
 
-  return encodedRedirect("success", "/create-game", "Game created");
+  return encodedRedirect("success", "/protected/create-game", "Game created");
 };
 
 export const fetchGames = async () => {

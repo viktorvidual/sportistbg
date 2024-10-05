@@ -5,6 +5,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { createClient } from "@/utils/supabase/server";
 import { Button } from "@/components/ui/button";
 import { deleteGameAction } from "@/app/actions";
+import ConfirmActionModal from "@/components/confirm-action-modal";
 
 export default async function Page({ params }: { params: { id: string } }) {
   const id = params.id;
@@ -52,15 +53,17 @@ export default async function Page({ params }: { params: { id: string } }) {
         />
       </div>
       <div className="flex justify-center space-x-4">
+        <ConfirmActionModal
+          triggerText="Delete Game"
+          title="Are you sure that you would like to delete this game?"
+          onConfirm={deleteGameWithId}
+        />
         <Link
           href=""
-          className={`${buttonVariants({ variant: "outline" })} w-[200px]`}
+          className={`${buttonVariants({ variant: "default" })} flex-1`}
         >
           Edit Game
         </Link>
-        <form action={deleteGameWithId}>
-          <Button className={` w-[200px]`}>Delete Game</Button>
-        </form>
       </div>
     </div>
   );
