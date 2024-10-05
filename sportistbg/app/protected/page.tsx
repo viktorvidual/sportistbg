@@ -1,6 +1,9 @@
-import { fetchEvents } from "../actions";
+import { fetchGames } from "../actions";
 import { Camelize } from "camelize-ts";
 import AllGames from "@/components/all-games";
+
+//styles components
+import { MainContainer } from "@/components/ui/mainContainer";
 
 //this has to be redone and included in types file
 export type EventResult = {
@@ -14,12 +17,11 @@ export type EventResult = {
 export type Event = Camelize<EventResult>;
 
 export default async function ProtectedPage() {
-  const { data: eventResults } = await fetchEvents();
+  const { data: eventResults } = await fetchGames();
 
   return (
-    <div className="flex-1 w-full flex flex-col gap-12 p-8">
-      <h1 className="font-bold text-2xl">Events near me:</h1>
+    <MainContainer>
       <AllGames />
-    </div>
+    </MainContainer>
   );
 }

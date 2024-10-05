@@ -166,20 +166,19 @@ export const createGameAction = async (formData: FormData) => {
   return encodedRedirect("success", "/create-game", "Game created");
 };
 
-export const fetchEvents = async () => {
+export const fetchGames = async () => {
   const supabase = createClient();
   const { data, error } = await supabase.from(DB_TABLES.events).select();
 
   if (error) {
     console.error("Supabase Fetch Error:", error);
-    console.error("Error Details:", error.message);
     return { error: "Could not fetch events" };
   }
 
   return { data: camelize(data) };
 };
 
-export const fetchEvent = async (
+export const fetchGame = async (
   id: string
 ): Promise<{
   data?: Event[];
@@ -194,9 +193,20 @@ export const fetchEvent = async (
 
   if (error) {
     console.error("Supabase Fetch Error:", error);
-    console.error("Error Details:", error.message);
     return { error: "Could not fetch event" };
   }
 
   return { data: camelize(data) };
+};
+
+export const deleteGameAction = async (id: string) => {
+  const supabase = createClient();
+  const { error } = await supabase.from(DB_TABLES.events).delete().eq("id", id);
+
+  if (error) {
+    console.error("Supabase Delete Error:", error);
+    return { error: "Could not delete game" };
+  }
+
+  return redirect("/protected");
 };
