@@ -3,6 +3,6 @@ export const DB_TABLES = {
 };
 
 export const ROUTES = {
-  createGane: "/games/create",
-  gameDetails: "/games",
+  createGane: "/protected/create-game",
+  gameDetails: "/game",
 };
