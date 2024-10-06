@@ -133,35 +133,36 @@ export const signOutAction = async () => {
   return redirect("/sign-in");
 };
 
-export const createGameAction = async (formData: FormData) => {
+export const createGameAction = async (gameData: {
+  name: string;
+  date: string;
+  time: string;
+  location: string;
+  maxPlayers: number;
+}): Promise<void> => {
   const supabase = createClient();
   const {
-    data: { session },
-  } = await supabase.auth.getSession();
+    data: { user },
+  } = await supabase.auth.getUser();
 
-  if (!session?.user) {
+  if (!user) {
     return encodedRedirect(
       "error",
       "/protected/create-game",
       "You must be logged in to create a game"
     );
   }
-
-  const name = formData.get("name") as string;
-  const creatorId = session.user.id;
-  const location = formData.get("location") as string;
-  const maxPlayers = formData.get("maxPlayers") as string;
-  const date = formData.get("date") as string;
-  const time = formData.get("time") as string;
-
-  const dateTime = moment(`${date} ${time}`, "YYYY-MM-DD HH:mm");
+  const dateTime = moment(
+    `${gameData.date} ${gameData.time}`,
+    "YYYY-MM-DD HH:mm"
+  );
 
   const body = {
-    name,
-    creator_id: creatorId,
+    name: gameData.name,
     scheduled_at: dateTime.toISOString(),
-    location,
-    max_players: parseInt(maxPlayers),
+    location: gameData.location,
+    max_players: gameData.maxPlayers,
+    creator_id: user.id,
   };
 
   const { data, error } = await supabase
@@ -172,16 +173,10 @@ export const createGameAction = async (formData: FormData) => {
   if (error) {
     console.error("Supabase Insert Error:", error);
     console.error("Error Details:", error.message);
-    return encodedRedirect(
-      "error",
-      "/protected/create-game",
-      "Could not create game"
-    );
   } else {
     console.log("game created", data);
+    redirect(`/game/${data[0].id}`);
   }
-
-  return encodedRedirect("success", "/protected/create-game", "Game created");
 };
 
 export const fetchAllGames = async () => {
@@ -196,7 +191,9 @@ export const fetchAllGames = async () => {
   return { data: camelize(data) };
 };
 
-export const fetchGamesByUser = async (userId: string): Promise<{
+export const fetchGamesByUser = async (
+  userId: string
+): Promise<{
   data?: Event[];
   error?: string;
 }> => {
@@ -212,7 +209,7 @@ export const fetchGamesByUser = async (userId: string): Promise<{
   }
 
   return { data: camelize(data) };
-}
+};
 
 export const fetchGame = async (
   id: string
