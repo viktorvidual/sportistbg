@@ -5,7 +5,6 @@ import AllGames from "@/components/all-games";
 import { Main } from "@/components/tags/mainContainer";
 
 export default async function ProtectedPage() {
-  const { data: eventResults } = await fetchAllGames();
 
   return (
     <Main>
