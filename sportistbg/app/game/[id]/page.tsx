@@ -19,14 +19,14 @@ export default async function Page({ params }: { params: { id: string } }) {
     data: { user },
   } = await createClient().auth.getUser();
 
-  // const userIsOwner = user?.id === event.owner_id;
+  const userIsOwner = user?.id === event?.creatorId;
 
   const deleteGameWithId = deleteGameAction.bind(null, id);
 
   return (
-    <div className="flex gap-6 flex-col w-full p-3">
-      <p className="text-2xl">Game Details: {event.name}</p>
-      <p>{event.location}</p>
+    <div className="flex gap-4 flex-col w-full p-3">
+      <h1 className="text-2xl">Game Details: {event.name}</h1>
+      <h2>Location: {event.location}</h2>
       {/* Google Maps For Mobile */}
       <div className="block md:hidden">
         <iframe
@@ -51,20 +51,24 @@ export default async function Page({ params }: { params: { id: string } }) {
           }
         />
       </div>
-      <div className="flex justify-center space-x-4">
-        <ConfirmActionModal
-          triggerText="Delete Game"
-          title="Are you sure that you would like to delete this game?"
-          onConfirm={deleteGameWithId}
-          loadingText="Deleting Game"
-        />
-        <Link
-          href=""
-          className={`${buttonVariants({ variant: "default" })} flex-1`}
-        >
-          Edit Game
-        </Link>
-      </div>
+      {userIsOwner && (
+        <div className="flex justify-center space-x-4">
+          {/* Modal for delete game */}
+          <ConfirmActionModal
+            triggerText="Delete Game"
+            title="Confirm delete"
+            description="This action cannot be undone."
+            onConfirm={deleteGameWithId}
+            loadingText="Deleting Game"
+          />
+          <Link
+            href=""
+            className={`${buttonVariants({ variant: "default" })} flex-1`}
+          >
+            Edit Game
+          </Link>
+        </div>
+      )}
     </div>
   );
 }

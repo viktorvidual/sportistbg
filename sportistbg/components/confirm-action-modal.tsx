@@ -41,7 +41,7 @@ export default function ConfirmActionModal({
     } catch (error) {
       toast({ title: "Could not delete game" });
       setIsLoading(false);
-    } 
+    }
   };
 
   return (
@@ -51,7 +51,7 @@ export default function ConfirmActionModal({
           {triggerText}
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-[80%] sm:max-w-sm py-10">
+      <DialogContent className="max-w-[80%] sm:max-w-sm py-10 rounded-md">
         {isLoading ? (
           <DialogHeader>
             <DialogTitle>{loadingText}</DialogTitle>

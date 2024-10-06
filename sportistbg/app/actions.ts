@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import { DB_TABLES } from "../lib/constants";
 import moment from "moment";
 import camelize from "camelize-ts";
-import { Event } from "./protected/page";
+import { Event, EventResult } from "@/types/Event";
 import { ROUTES } from "../lib/constants";
 
 export const signUpAction = async (formData: FormData) => {
@@ -134,11 +134,23 @@ export const signOutAction = async () => {
 };
 
 export const createGameAction = async (formData: FormData) => {
+  const supabase = createClient();
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  if (!session?.user) {
+    return encodedRedirect(
+      "error",
+      "/protected/create-game",
+      "You must be logged in to create a game"
+    );
+  }
+
   const name = formData.get("name") as string;
+  const creatorId = session.user.id;
   const location = formData.get("location") as string;
   const maxPlayers = formData.get("maxPlayers") as string;
-  const supabase = createClient();
-
   const date = formData.get("date") as string;
   const time = formData.get("time") as string;
 
@@ -146,6 +158,7 @@ export const createGameAction = async (formData: FormData) => {
 
   const body = {
     name,
+    creator_id: creatorId,
     scheduled_at: dateTime.toISOString(),
     location,
     max_players: parseInt(maxPlayers),
@@ -171,7 +184,7 @@ export const createGameAction = async (formData: FormData) => {
   return encodedRedirect("success", "/protected/create-game", "Game created");
 };
 
-export const fetchGames = async () => {
+export const fetchAllGames = async () => {
   const supabase = createClient();
   const { data, error } = await supabase.from(DB_TABLES.events).select();
 
@@ -182,6 +195,24 @@ export const fetchGames = async () => {
 
   return { data: camelize(data) };
 };
+
+export const fetchGamesByUser = async (userId: string): Promise<{
+  data?: Event[];
+  error?: string;
+}> => {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from(DB_TABLES.events)
+    .select()
+    .eq("creator_id", userId);
+
+  if (error) {
+    console.error("Supabase Fetch Error:", error);
+    return { error: "Could not fetch events" };
+  }
+
+  return { data: camelize(data) };
+}
 
 export const fetchGame = async (
   id: string

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { ROUTES } from "@/lib/constants";
 
 type EventCardProps = {
-  id: number;
+  id: string;
   imageUrl?: string;
   scheduledAt: string;
   eventName: string;

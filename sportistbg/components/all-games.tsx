@@ -1,19 +1,32 @@
 import { EventCard } from "./ui/event-card";
-import { fetchGames } from "@/app/actions";
+import { fetchAllGames, fetchGamesByUser } from "@/app/actions";
 import { Event } from "@/types/Event";
 
 //this has to be redone and included in types file
 
-export default async function AllGames() {
-  const { data: eventResults } = await fetchGames();
+type Props = {
+  title?: string;
+  userId?: string;
+};
+
+export default async function AllGames({ userId, title = "All Games" }: Props) {
+  let games;
+
+  if (!userId) {
+    const { data: eventResults } = await fetchAllGames();
+    games = eventResults;
+  } else {
+    const { data: eventResults } = await fetchAllGames();
+    games = eventResults;
+  }
 
   return (
     <div className="flex-1 w-full flex flex-col gap-12 p-8">
-      <h1 className="font-bold text-2xl">Latest Games:</h1>
-      {eventResults ? (
+      <h1 className="font-bold text-2xl">{title}</h1>
+      {games ? (
         <>
           <div className="grid gap-12 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
-            {eventResults.map((event: Event) => (
+            {games.map((event: Event) => (
               <EventCard
                 id={event.id}
                 eventName={event.name}

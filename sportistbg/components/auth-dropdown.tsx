@@ -10,58 +10,40 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import SettingsIcon from "@mui/icons-material/Settings";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 
 import { signOutAction } from "@/app/actions";
-import { redirect } from "next/navigation";
-
-const navigateToMyEvents = async () => {
-  "use server";
-  return redirect("/my-events");
-};
-
-const navigateToSettings = async () => {
-  "use server";
-  return redirect("/settings");
-};
+import Link from "next/link";
 
 export default async function AuthDropdown() {
-  const buttonStyle = "w-full flex justify-start gap-2";
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <AccountCircleIcon style={{ fontSize: 32 }} />
+        <AccountCircleIcon style={{ fontSize: 40 }} />
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-content" align="center">
-        {/* My Events */}
+      <DropdownMenuContent className="flex flex-col w-content" align="center">
+        <Link
+          href="/protected/my-games"
+          className={`${buttonVariants({ variant: "ghost" })} gap-1 flex justify-start items-center`}
+        >
+          <CalendarMonthIcon />
+          <span>My Games</span>
+        </Link>
 
-        <form action={navigateToMyEvents} method="get">
-          <DropdownMenuItem asChild>
-            <Button variant="ghost" className={buttonStyle}>
-              <CalendarMonthIcon />
-              <span>My Events</span>
-            </Button>
-          </DropdownMenuItem>
-        </form>
+        <Link
+          className={`${buttonVariants({ variant: "ghost" })} gap-1 flex justify-start items-center`}
+          href="/protected/settings"
+        >
+          <SettingsIcon />
+          <span>Settings</span>
+        </Link>
 
-        {/* Settings */}
-        <form action={navigateToSettings} method="get">
-          <DropdownMenuItem asChild>
-            <Button variant="ghost" className={buttonStyle}>
-              <SettingsIcon />
-              <span>Settings</span>
-            </Button>
-          </DropdownMenuItem>
-        </form>
-
-        {/* Sign Out */}
-        <form action={signOutAction} method="post">
-          <DropdownMenuItem asChild>
-            <Button type="submit" variant="ghost" className={buttonStyle}>
-              <LogoutIcon />
-              <span>Sign out</span>
-            </Button>
-          </DropdownMenuItem>
+        <form action={signOutAction} method="post" className="w-full">
+          <div></div>
+          <Button type="submit" variant={"ghost"} className="w-full gap-1">
+            <LogoutIcon />
+            <span>Sign out</span>
+          </Button>
         </form>
       </DropdownMenuContent>
     </DropdownMenu>
