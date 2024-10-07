@@ -203,6 +203,42 @@ export const fetchAllGames = async () => {
   return { data: camelize(data) };
 };
 
+export const fetchGames = async ({
+  onDate,
+  searchQuery,
+}: {
+  onDate?: string;
+  searchQuery?: string;
+}): Promise<{
+  data?: Event[];
+  error?: string;
+}> => {
+  const supabase = createClient();
+
+  let query = supabase.from(DB_TABLES.events).select();
+
+  // If onDate is provided, filter by that date
+  if (onDate) {
+    query = query.eq("scheduled_at", onDate);
+  }
+
+  // If searchQuery is provided, filter by that query
+  if (searchQuery) {
+    query = query.ilike("location", `%${searchQuery}%`);
+  }
+
+  const { data, error } = await query.order("scheduled_at", {
+    ascending: true,
+  });
+
+  if (error) {
+    console.error("Supabase Fetch Error:", error);
+    return { error: "Could not fetch events" };
+  }
+
+  return { data: camelize(data) };
+};
+
 export const fetchTodayGames = async () => {
   const supabase = createClient();
 

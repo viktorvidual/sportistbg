@@ -2,7 +2,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
-  DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
@@ -16,7 +15,7 @@ import { signOutAction } from "@/app/actions";
 import Link from "next/link";
 
 export default async function AuthDropdown() {
-  const textStyle = "text-lg";
+  const textStyle = "font-bold";
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

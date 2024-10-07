@@ -9,6 +9,7 @@ type EventCardProps = {
   scheduledAt: string;
   eventName: string;
   location: string;
+  myGame?: boolean;
 };
 
 export const EventCard = ({
@@ -16,6 +17,7 @@ export const EventCard = ({
   scheduledAt,
   eventName = "10 vs 10",
   location = "Spartak Varna",
+  myGame = false,
 }: EventCardProps) => {
   const href = `${ROUTES.gameDetails}/${id}`;
 
@@ -23,7 +25,7 @@ export const EventCard = ({
   const date = moment(scheduledAt).format("DD/MM/YY");
 
   return (
-    <Link href={href}>
+    <Link href={href} className="z-index-0">
       <div className="w-100% rounded overflow-hidden shadow-lg bg-white relative group lg:w-[300px]">
         {/* Overlay */}
         <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-10 transition-opacity duration-300" />
@@ -44,7 +46,9 @@ export const EventCard = ({
               <p className="text-sm text-gray-600">{location} Stadium</p>
             </div>
             <div className="flex flex-col justify-center mt-2 ml-2">
-              <Button>Join Game</Button>
+              <Button className="bg-black text-white z-index-10">
+                {myGame ? "Edit Game" : "Join Game"}
+              </Button>
             </div>
           </div>
         </div>
