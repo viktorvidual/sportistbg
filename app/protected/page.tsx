@@ -7,8 +7,8 @@ import { Main } from "@/components/tags/mainContainer";
 export default async function ProtectedPage() {
   return (
     <>
-      <Hero />
       <Main>
+      <Hero />
         <GamesForToday />
       </Main>
     </>

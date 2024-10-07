@@ -16,6 +16,7 @@ import { signOutAction } from "@/app/actions";
 import Link from "next/link";
 
 export default async function AuthDropdown() {
+  const textStyle = "text-lg";
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -27,7 +28,7 @@ export default async function AuthDropdown() {
           className={`${buttonVariants({ variant: "ghost" })} gap-1 flex justify-start items-center`}
         >
           <CalendarMonthIcon />
-          <span>My Games</span>
+          <p className={textStyle}>My Games</p>
         </Link>
 
         <Link
@@ -35,14 +36,15 @@ export default async function AuthDropdown() {
           href="/protected/settings"
         >
           <SettingsIcon />
-          <span>Settings</span>
+          <p className={textStyle}>Settings</p>
         </Link>
 
         <form action={signOutAction} method="post" className="w-full">
           <div></div>
           <Button type="submit" variant={"ghost"} className="w-full gap-1">
             <LogoutIcon />
-            <span>Sign out</span>
+
+            <p className={textStyle}>Sign out</p>
           </Button>
         </form>
       </DropdownMenuContent>

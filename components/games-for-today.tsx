@@ -9,13 +9,13 @@ export default async function GamesForToday() {
   const { data: todayEvents } = await fetchTodayGames();
 
   return (
-    <div className="flex-1 w-full flex flex-col gap-6 p-8">
+    <div className="flex-1 w-full flex flex-col gap-6">
       <h1 className="font-bold text-2xl">Games for today</h1>
       {todayEvents ? (
         <>
-          <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full">
             {todayEvents.map((event: Event, index: number) =>
-              index >= 4 ? (
+              index >= 5 ? (
                 <></>
               ) : (
                 <EventCard
@@ -32,9 +32,11 @@ export default async function GamesForToday() {
       ) : (
         <p>There are no events scheduled for today</p>
       )}
-      {todayEvents && todayEvents.length > 4 && (
-        <Button className="">View all games for today</Button>
-      )}
+      <div className="flex flex-1 justify-center">
+        {todayEvents && todayEvents.length > 5 && (
+          <Button className="">View all games for today</Button>
+        )}
+      </div>
     </div>
   );
 }
