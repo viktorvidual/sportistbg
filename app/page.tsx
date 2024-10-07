@@ -1,5 +1,5 @@
 import Hero from "@/components/hero";
-import AllGames from "@/components/all-games";
+import GamesForToday from "@/components/games-for-today";
 import { Main } from "@/components/tags/mainContainer";
 
 export default async function Index() {
@@ -7,7 +7,7 @@ export default async function Index() {
     <>
       <Hero />
       <Main>
-        <AllGames />
+        <GamesForToday />
       </Main>
     </>
   );

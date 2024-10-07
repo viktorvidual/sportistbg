@@ -6,9 +6,9 @@ import { redirect } from "next/navigation";
 import { DB_TABLES } from "../lib/constants";
 import moment from "moment";
 import camelize from "camelize-ts";
-import { Event, EventResult } from "@/types/Event";
-import { ROUTES } from "../lib/constants";
+import { Event } from "@/types/Event";
 
+//AUTH ACTIONS
 export const signUpAction = async (formData: FormData) => {
   const email = formData.get("email")?.toString();
   const password = formData.get("password")?.toString();
@@ -133,6 +133,18 @@ export const signOutAction = async () => {
   return redirect("/sign-in");
 };
 
+export const signOutUserAfterAuthError = async () => {
+  const supabase = createClient();
+  await supabase.auth.signOut();
+  encodedRedirect(
+    "error",
+    "/sign-in",
+    "You must be logged in to access this page"
+  );
+};
+
+//GAME ACTIONS
+
 export const createGameAction = async (gameData: {
   name: string;
   date: string;
@@ -182,6 +194,29 @@ export const createGameAction = async (gameData: {
 export const fetchAllGames = async () => {
   const supabase = createClient();
   const { data, error } = await supabase.from(DB_TABLES.events).select();
+
+  if (error) {
+    console.error("Supabase Fetch Error:", error);
+    return { error: "Could not fetch events" };
+  }
+
+  return { data: camelize(data) };
+};
+
+export const fetchTodayGames = async () => {
+  const supabase = createClient();
+
+  // Define the start and end of the day using moment
+  const startOfDay = moment().startOf("day").toISOString();
+  const endOfDay = moment().endOf("day").toISOString();
+
+  const { data, error } = await supabase
+    .from(DB_TABLES.events)
+    .select()
+    .gte("scheduled_at", startOfDay)
+    .lte("scheduled_at", endOfDay)
+    .order("scheduled_at", { ascending: true })
+    .limit(5);
 
   if (error) {
     console.error("Supabase Fetch Error:", error);

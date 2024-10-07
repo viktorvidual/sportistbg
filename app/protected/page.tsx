@@ -1,14 +1,16 @@
-import { fetchAllGames } from "../actions";
-import AllGames from "@/components/all-games";
+import GamesForToday from "@/components/games-for-today";
+import Hero from "@/components/hero";
 
 //styles components
 import { Main } from "@/components/tags/mainContainer";
 
 export default async function ProtectedPage() {
-
   return (
-    <Main>
-      <AllGames />
-    </Main>
+    <>
+      <Hero />
+      <Main>
+        <GamesForToday />
+      </Main>
+    </>
   );
 }

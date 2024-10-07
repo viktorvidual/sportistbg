@@ -89,7 +89,6 @@ export default function Page() {
           >
             {isLoading ? "Creating Game..." : "Create Game"}
           </Button>
-          {/* <FormMessage message={searchParams} /> */}
         </div>
       </form>
     </main>
