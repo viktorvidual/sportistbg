@@ -9,9 +9,11 @@ export default async function GamesForToday() {
   const { data: todayEvents } = await fetchTodayGames();
 
   return (
-    <div className="flex-1 w-full flex flex-col gap-6">
-      <h1 className="font-bold text-2xl">Games to be played today</h1>
-      {todayEvents ? (
+    <div className="flex-1 w-full flex flex-col gap-6 items-center">
+      <h2 className="font-bold text-3xl text-center">
+        Games to be played today
+      </h2>
+      {todayEvents && todayEvents.length > 0 ? (
         <>
           <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full">
             {todayEvents.map((event: Event, index: number) =>

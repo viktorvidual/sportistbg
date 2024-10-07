@@ -272,7 +272,8 @@ export const fetchGamesByUser = async (
   const { data, error } = await supabase
     .from(DB_TABLES.events)
     .select()
-    .eq("creator_id", userId);
+    .eq("creator_id", userId)
+    .order("scheduled_at", { ascending: true });
 
   if (error) {
     console.error("Supabase Fetch Error:", error);

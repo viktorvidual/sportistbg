@@ -1,10 +1,11 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { createGameAction } from "@/app/actions";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
+import moment from "moment";
 
 export default function Page() {
   const [isLoading, setIsLoading] = useState(false);
@@ -30,7 +31,6 @@ export default function Page() {
         title: "Game created successfully",
         description: "You can now view the game in the list of games.",
       });
-
     } catch (e) {
       return toast({
         title: "Could not create game, please try again.",
@@ -40,7 +40,7 @@ export default function Page() {
 
   return (
     <main>
-      <h1 className="text-2xl">Create a Game</h1>
+      <h1 className="text-2xl font-bold">Create a Game</h1>
       <form className="flex-1 flex flex-col min-w-64">
         <div className="flex flex-col gap-2 [&>input]:mb-3 mt-8">
           <Label htmlFor="name">Name</Label>
@@ -56,6 +56,7 @@ export default function Page() {
             name="date"
             required
             onChange={(e) => setDate(e.target.value)}
+            min={moment().format("YYYY-MM-DD")}
           />
           <Label htmlFor="time">Time</Label>
           <Input
@@ -81,10 +82,10 @@ export default function Page() {
             onChange={(e) => setMaxPlayers(parseInt(e.target.value))}
           />
           <Button
-            onClick={(e) => { 
+            onClick={(e) => {
               e.preventDefault();
               onComplete();
-            } }
+            }}
             disabled={!name || !date || !time || !location || !maxPlayers}
           >
             {isLoading ? "Creating Game..." : "Create Game"}
