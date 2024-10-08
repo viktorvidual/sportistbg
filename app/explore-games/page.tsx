@@ -1,16 +1,29 @@
 import { EventCard } from "@/components/ui/event-card";
 import { fetchGames } from "../actions";
 import { Event } from "@/types/Event";
+import GamesPagination from "./pagination";
+
 export default async function ExploreGames({
   searchParams,
 }: {
-  searchParams: { onDate?: string; searchQuery?: string };
+  searchParams: {
+    onDate?: string;
+    searchQuery?: string;
+    page?: number;
+    limit?: number;
+  };
 }) {
-  console.log("searchParams", searchParams);
-  const onDate = searchParams?.onDate || undefined;
-  const searchQuery = searchParams?.searchQuery || undefined;
+  const onDate = searchParams?.onDate || "";
+  const searchQuery = searchParams?.searchQuery || "";
+  const page = searchParams?.page || 1;
+  const limit = searchParams?.limit || 12;
 
-  const { data, error } = await fetchGames({ onDate, searchQuery });
+  const { data, error, nPages } = await fetchGames({
+    onDate,
+    searchQuery,
+    page,
+    limit,
+  });
 
   const title = searchQuery
     ? `Explor Games in ${searchQuery}`
@@ -32,6 +45,13 @@ export default async function ExploreGames({
               />
             ))}
           </div>
+          <GamesPagination
+            onDate={onDate}
+            searchQuery={searchQuery}
+            page={page}
+            limit={limit}
+            nPages={nPages}
+          />
         </>
       ) : (
         <p>No games found</p>

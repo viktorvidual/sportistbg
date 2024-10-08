@@ -206,16 +206,21 @@ export const fetchAllGames = async () => {
 export const fetchGames = async ({
   onDate,
   searchQuery,
+  page = 1,
+  limit = 12,
 }: {
   onDate?: string;
   searchQuery?: string;
+  page?: number;
+  limit?: number;
 }): Promise<{
   data?: Event[];
   error?: string;
+  nPages?: number;
 }> => {
   const supabase = createClient();
 
-  let query = supabase.from(DB_TABLES.events).select();
+  let query = supabase.from(DB_TABLES.events).select("*", { count: "exact" });
 
   // If onDate is provided, filter by that date
   if (onDate) {
@@ -227,16 +232,22 @@ export const fetchGames = async ({
     query = query.ilike("location", `%${searchQuery}%`);
   }
 
-  const { data, error } = await query.order("scheduled_at", {
+  const start = (page - 1) * limit;
+  const end = start + limit - 1;
+  query.range(start, end);
+
+  const { data, error, count } = await query.order("scheduled_at", {
     ascending: true,
   });
 
+  const nPages = Math.ceil(count ? count / limit : 1);
+
   if (error) {
     console.error("Supabase Fetch Error:", error);
-    return { error: "Could not fetch events" };
+    return { error: error.message };
   }
 
-  return { data: camelize(data) };
+  return { data: camelize(data), nPages };
 };
 
 export const fetchTodayGames = async () => {
