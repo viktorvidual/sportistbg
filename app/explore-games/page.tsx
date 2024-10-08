@@ -2,6 +2,8 @@ import { EventCard } from "@/components/ui/event-card";
 import { fetchGames } from "../actions";
 import { Event } from "@/types/Event";
 import GamesPagination from "./pagination";
+import SearchBar from "@/components/search-bar";
+import moment from "moment";
 
 export default async function ExploreGames({
   searchParams,
@@ -25,13 +27,20 @@ export default async function ExploreGames({
     limit,
   });
 
-  const title = searchQuery
-    ? `Explor Games in ${searchQuery}`
-    : "Explore All Games";
+  let title = "Explore Games";
+
+  if (onDate) {
+    title += ` on ${moment(onDate).format("MM/DD/YY")}`;
+  }
+
+  if (searchQuery) {
+    title += ` in ${searchQuery}`;
+  }
 
   return (
     <div className="flex-1 w-full flex flex-col gap-6">
       <h1 className="font-bold text-2xl">{title}</h1>
+      <SearchBar searchParams={{ query: searchQuery, onDate: onDate }} />
       {data && data.length > 0 ? (
         <>
           <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full">
@@ -45,13 +54,15 @@ export default async function ExploreGames({
               />
             ))}
           </div>
-          <GamesPagination
-            onDate={onDate}
-            searchQuery={searchQuery}
-            page={page}
-            limit={limit}
-            nPages={nPages ? nPages : 1}
-          />
+          {nPages && nPages > 1 && (
+            <GamesPagination
+              onDate={onDate}
+              searchQuery={searchQuery}
+              page={page}
+              limit={limit}
+              nPages={nPages ? nPages : 1}
+            />
+          )}
         </>
       ) : (
         <p>No games found</p>

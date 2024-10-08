@@ -224,7 +224,10 @@ export const fetchGames = async ({
 
   // If onDate is provided, filter by that date
   if (onDate) {
-    query = query.eq("scheduled_at", onDate);
+    const date = new Date(onDate);
+    const startOfDay = moment(date).startOf("day").toISOString();
+    const endOfDay = moment(date).endOf("day").toISOString();
+    query = query.gte("scheduled_at", startOfDay).lte("scheduled_at", endOfDay);
   }
 
   // If searchQuery is provided, filter by that query

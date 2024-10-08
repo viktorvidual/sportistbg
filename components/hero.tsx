@@ -2,6 +2,7 @@ import { Input } from "@/components/ui/input";
 import { buttonVariants } from "@/components/ui/button";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import SearchBar from "./search-bar";
 
 export default function Header() {
   return (
@@ -21,21 +22,7 @@ export default function Header() {
       <div className="w-full p-[1px] bg-gradient-to-r from-transparent via-foreground/10 to-transparent my-8" />
       <p className="text-2xl lg:text-3xl font-bold">Find a game </p>
 
-      <div className="flex w-full max-w-xl items-center space-x-2">
-        <form
-          action="/explore-games"
-          method="GET"
-          className="flex w-full space-x-2"
-        >
-          <Input
-            type="text"
-            name="searchQuery"
-            placeholder="search by city"
-            required
-          />
-          <Button type="submit">Search</Button>
-        </form>
-      </div>
+      <SearchBar searchParams={{ query: "", onDate: "" }} />
 
       <div className="w-full p-[1px] bg-gradient-to-r from-transparent via-foreground/10 to-transparent my-8" />
     </div>
