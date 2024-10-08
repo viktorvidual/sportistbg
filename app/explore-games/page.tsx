@@ -50,7 +50,7 @@ export default async function ExploreGames({
             searchQuery={searchQuery}
             page={page}
             limit={limit}
-            nPages={nPages}
+            nPages={nPages ? nPages : 1}
           />
         </>
       ) : (
