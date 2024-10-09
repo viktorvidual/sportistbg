@@ -5,4 +5,5 @@ export const DB_TABLES = {
 export const ROUTES = {
   createGane: "/protected/create-game",
   gameDetails: "/game",
+  EXPLORE_GAMES: "explore-games"
 };
