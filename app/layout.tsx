@@ -22,7 +22,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={GeistSans.className} suppressHydrationWarning>
+    <html
+      lang="en"
+      className={GeistSans.className}
+      suppressHydrationWarning
+      maximum-scale={1}
+    >
       <body className="bg-background text-foreground">
         <ThemeProvider
           attribute="class"
