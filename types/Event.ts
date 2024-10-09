@@ -1,13 +1,14 @@
 import { Camelize } from "camelize-ts";
 
 export type EventResult = {
-  id: string;
+  id: number;
   creator_id: string;
   name: string;
   location: string;
-  image?: string;
+  city: string;
   scheduled_at: string;
   max_players: number;
+  players_needed: number;
 };
 
 export type Event = Camelize<EventResult>;

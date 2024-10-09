@@ -27,6 +27,10 @@ export default async function ExploreGames({
     limit,
   });
 
+  if (error) {
+    return <p>Could not fetch games</p>;
+  }
+
   let title = "Explore Games";
 
   if (onDate) {

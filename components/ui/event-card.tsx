@@ -5,7 +5,7 @@ import { ROUTES } from "@/lib/constants";
 import { Button } from "./button";
 
 type EventCardProps = {
-  id: string;
+  id: number;
   scheduledAt: string;
   eventName: string;
   location: string;

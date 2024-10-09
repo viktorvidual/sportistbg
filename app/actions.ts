@@ -7,6 +7,7 @@ import { DB_TABLES } from "../lib/constants";
 import moment from "moment";
 import camelize from "camelize-ts";
 import { Event } from "@/types/Event";
+import { SupabaseError } from "@/types/errors";
 
 //AUTH ACTIONS
 export const signUpAction = async (formData: FormData) => {
@@ -151,7 +152,11 @@ export const createGameAction = async (gameData: {
   time: string;
   location: string;
   maxPlayers: number;
-}): Promise<void> => {
+  city: string;
+  playersNeeded: number;
+}): Promise<{
+  error?: SupabaseError;
+}> => {
   const supabase = createClient();
   const {
     data: { user },
@@ -174,6 +179,8 @@ export const createGameAction = async (gameData: {
     scheduled_at: dateTime.toISOString(),
     location: gameData.location,
     max_players: gameData.maxPlayers,
+    players_needed: gameData.playersNeeded,
+    city: gameData.city,
     creator_id: user.id,
   };
 
@@ -183,8 +190,7 @@ export const createGameAction = async (gameData: {
     .select();
 
   if (error) {
-    console.error("Supabase Insert Error:", error);
-    console.error("Error Details:", error.message);
+    return { error };
   } else {
     console.log("game created", data);
     redirect(`/game/${data[0].id}`);
@@ -232,7 +238,7 @@ export const fetchGames = async ({
 
   // If searchQuery is provided, filter by that query
   if (searchQuery) {
-    query = query.ilike("location", `%${searchQuery}%`);
+    query = query.ilike("city", `%${searchQuery}%`);
   }
 
   const start = (page - 1) * limit;

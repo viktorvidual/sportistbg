@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import moment from "moment";
 
 const InputContainer = ({ children }: { children: React.ReactNode }) => (
-  <div className="flex-1 gap-3 flex-col">{children}</div>
+  <div className="flex flex-1 gap-2.5 flex-col">{children}</div>
 );
 export default function Page() {
   const [isLoading, setIsLoading] = useState(false);
@@ -25,20 +25,28 @@ export default function Page() {
   const onComplete = async () => {
     try {
       setIsLoading(true);
-      await createGameAction({
+      const { error } = await createGameAction({
         name,
         date,
         time,
         location,
         maxPlayers,
-      });
+        playersNeeded,
+        city,
+      }) || {}; 
+
+      if (error) {
+        throw new Error(error.message);
+      }
+
       toast({
         title: "Game created successfully",
         description: "You can now view the game in the list of games.",
       });
     } catch (e) {
       return toast({
-        title: "Could not create game, please try again.",
+        title: "Could not create game",
+        description: e instanceof Error && e.message,
       });
     }
   };
@@ -106,7 +114,6 @@ export default function Page() {
                 name="maxPlayers"
                 placeholder="Max players"
                 required
-                defaultValue={12}
                 onChange={(e) => setMaxPlayers(parseInt(e.target.value))}
               />
             </InputContainer>
@@ -118,7 +125,6 @@ export default function Page() {
                 name="playersNeeded"
                 placeholder="Players needed"
                 required
-                defaultValue={12}
                 onChange={(e) => setPlayersNeeded(parseInt(e.target.value))}
               />
             </InputContainer>
@@ -128,7 +134,15 @@ export default function Page() {
               e.preventDefault();
               onComplete();
             }}
-            disabled={!name || !date || !time || !location || !maxPlayers}
+            disabled={
+              !name ||
+              !date ||
+              !time ||
+              !location ||
+              !maxPlayers ||
+              !playersNeeded ||
+              !city
+            }
           >
             {isLoading ? "Creating Game..." : "Create Game"}
           </Button>

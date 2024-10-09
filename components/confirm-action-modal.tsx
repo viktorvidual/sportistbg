@@ -51,7 +51,7 @@ export default function ConfirmActionModal({
           {triggerText}
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-[80%] sm:max-w-sm py-10 rounded-md">
+      <DialogContent className="max-w-[80%] sm:max-w-sm py-5 rounded-md">
         {isLoading ? (
           <DialogHeader>
             <DialogTitle>{loadingText}</DialogTitle>
