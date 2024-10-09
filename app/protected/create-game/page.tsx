@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { createGameAction } from "@/app/actions";
@@ -7,6 +7,9 @@ import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import moment from "moment";
 
+const InputContainer = ({ children }: { children: React.ReactNode }) => (
+  <div className="flex-1 gap-3 flex-col">{children}</div>
+);
 export default function Page() {
   const [isLoading, setIsLoading] = useState(false);
 
@@ -14,8 +17,10 @@ export default function Page() {
   const [name, setName] = useState("");
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
+  const [city, setCity] = useState("");
   const [location, setLocation] = useState("");
   const [maxPlayers, setMaxPlayers] = useState(12);
+  const [playersNeeded, setPlayersNeeded] = useState(0);
 
   const onComplete = async () => {
     try {
@@ -39,48 +44,85 @@ export default function Page() {
   };
 
   return (
-    <main>
+    <main className="w-full max-w-md mx-auto">
       <h1 className="text-2xl font-bold">Create a Game</h1>
       <form className="flex-1 flex flex-col min-w-64">
-        <div className="flex flex-col gap-2 [&>input]:mb-3 mt-8">
-          <Label htmlFor="name">Name</Label>
-          <Input
-            name="name"
-            placeholder="Game name"
-            required
-            onChange={(e) => setName(e.target.value)}
-          />
-          <Label htmlFor="date">Date</Label>
-          <Input
-            type="date"
-            name="date"
-            required
-            onChange={(e) => setDate(e.target.value)}
-            min={moment().format("YYYY-MM-DD")}
-          />
-          <Label htmlFor="time">Time</Label>
-          <Input
-            type="time"
-            name="time"
-            required
-            onChange={(e) => setTime(e.target.value)}
-          />
-          <Label htmlFor="location">Location</Label>
-          <Input
-            name="location"
-            placeholder="Game location"
-            required
-            onChange={(e) => setLocation(e.target.value)}
-          />
-          <Label htmlFor="maxPlayers">Max Players</Label>
-          <Input
-            type="number"
-            name="maxPlayers"
-            placeholder="Max players"
-            required
-            defaultValue={12}
-            onChange={(e) => setMaxPlayers(parseInt(e.target.value))}
-          />
+        <div className="flex flex-col gap-3 mt-3">
+          <InputContainer>
+            <Label htmlFor="name">Name</Label>
+            <Input
+              name="name"
+              placeholder="Enter name"
+              required
+              onChange={(e) => setName(e.target.value)}
+            />
+          </InputContainer>
+          <div className="flex flox-row gap-2">
+            <InputContainer>
+              <Label htmlFor="date">Date</Label>
+              <Input
+                type="date"
+                name="date"
+                required
+                onChange={(e) => setDate(e.target.value)}
+                min={moment().format("YYYY-MM-DD")}
+              />
+            </InputContainer>
+            <div className="gap-3">
+              <Label htmlFor="time">Time</Label>
+              <Input
+                type="time"
+                name="time"
+                required
+                onChange={(e) => setTime(e.target.value)}
+              />
+            </div>
+          </div>
+          <InputContainer>
+            <Label htmlFor="date">City</Label>
+            <Input
+              name="city"
+              required
+              placeholder="Enter City"
+              onChange={(e) => setCity(e.target.value)}
+              min={moment().format("YYYY-MM-DD")}
+            />
+          </InputContainer>
+
+          <InputContainer>
+            <Label htmlFor="location">Stadium</Label>
+            <Input
+              name="location"
+              placeholder="Game location"
+              required
+              onChange={(e) => setLocation(e.target.value)}
+            />
+          </InputContainer>
+          <div className="flex flox-row gap-2">
+            <InputContainer>
+              <Label htmlFor="maxPlayers">Max Players</Label>
+              <Input
+                type="number"
+                name="maxPlayers"
+                placeholder="Max players"
+                required
+                defaultValue={12}
+                onChange={(e) => setMaxPlayers(parseInt(e.target.value))}
+              />
+            </InputContainer>
+
+            <InputContainer>
+              <Label htmlFor="playersNeeded">Players needed</Label>
+              <Input
+                type="number"
+                name="playersNeeded"
+                placeholder="Players needed"
+                required
+                defaultValue={12}
+                onChange={(e) => setPlayersNeeded(parseInt(e.target.value))}
+              />
+            </InputContainer>
+          </div>
           <Button
             onClick={(e) => {
               e.preventDefault();

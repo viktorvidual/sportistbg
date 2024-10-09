@@ -24,13 +24,13 @@ export default async function Page({ params }: { params: { id: string } }) {
   const deleteGameWithId = deleteGameAction.bind(null, id);
 
   return (
-    <div className="flex gap-4 flex-col w-full p-3">
-      <h1 className="text-2xl">Game Details: {event.name}</h1>
+    <div className="flex gap-4 flex-col w-full items-center">
+      <h1 className="text-2xl">{event.name}</h1>
       <h2>Location: {event.location}</h2>
       {/* Google Maps For Mobile */}
       <div className="block md:hidden">
         <iframe
-          width="100%"
+          width="350"
           height="300"
           loading="lazy"
           src={
@@ -52,8 +52,9 @@ export default async function Page({ params }: { params: { id: string } }) {
         />
       </div>
       {userIsOwner && (
-        <div className="flex justify-center space-x-4">
+        <div className="flex space-x-4">
           {/* Modal for delete game */}
+          
           <ConfirmActionModal
             triggerText="Delete Game"
             title="Confirm delete"
