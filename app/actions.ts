@@ -335,3 +335,130 @@ export const deleteGameAction = async (id: string) => {
 
   return redirect("/protected");
 };
+
+export const joinGame = async (
+  eventId: string
+): Promise<{
+  data?: Event[];
+  error: SupabaseError | null;
+}> => {
+  const supabase = createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return encodedRedirect(
+      "error",
+      "/protected/create-game",
+      "You must be logged in to create a game"
+    );
+  }
+
+  const body = {
+    user_id: user.id,
+    event_id: eventId,
+  };
+
+  // Insert row in event_users
+  const { error: insertError } = await supabase
+    .from(DB_TABLES.eventUsers)
+    .insert([body]);
+
+  if (insertError) {
+    return { error: insertError };
+  }
+
+  // Fetch participants array in events
+  const { data: participantsData, error: fetchError } = await supabase
+    .from(DB_TABLES.events)
+    .select("participants")
+    .eq("id", eventId)
+    .single(); // .single() ensures you get only one row
+
+  if (fetchError) {
+    return { error: fetchError };
+  }
+
+  const participants = participantsData?.participants ?? []; // Default to an empty array if null
+
+  // Ensure user isn't already in the participants array
+  if (!participants.includes(user.id)) {
+    const updatedParticipants = [...participants, user.id];
+
+    // Update the participants array in the events table
+    const { error: updateError } = await supabase
+      .from(DB_TABLES.events)
+      .update({ participants: updatedParticipants }) // Use .update() instead of .select()
+      .eq("id", eventId);
+
+    if (updateError) {
+      return { error: updateError };
+    }
+  }
+
+  return { error: null };
+};
+
+export const leaveGame = async (
+  eventId: string
+): Promise<{
+  data?: Event[];
+  error: SupabaseError | null;
+}> => {
+  const supabase = createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return encodedRedirect(
+      "error",
+      "/protected/join-game",
+      "You must be logged in to leave a game"
+    );
+  }
+
+  // Remove the row from event_users
+  const { error: deleteError } = await supabase
+    .from(DB_TABLES.eventUsers)
+    .delete()
+    .eq("user_id", user.id)
+    .eq("event_id", eventId);
+
+  if (deleteError) {
+    return { error: deleteError };
+  }
+
+  // Fetch participants array in events
+  const { data: participantsData, error: fetchError } = await supabase
+    .from(DB_TABLES.events)
+    .select("participants")
+    .eq("id", eventId)
+    .single(); // .single() ensures you get only one row
+
+  if (fetchError) {
+    return { error: fetchError };
+  }
+
+  const participants = participantsData?.participants ?? []; // Default to an empty array if null
+
+  // Remove the user from the participants array if they are in it
+  if (participants.includes(user.id)) {
+    const updatedParticipants = participants.filter(
+      (participantId: string) => participantId !== user.id
+    );
+
+    // Update the participants array in the events table
+    const { error: updateError } = await supabase
+      .from(DB_TABLES.events)
+      .update({ participants: updatedParticipants })
+      .eq("id", eventId);
+
+    if (updateError) {
+      return { error: updateError };
+    }
+  }
+
+  return { error: null };
+};

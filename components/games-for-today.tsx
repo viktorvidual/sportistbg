@@ -1,11 +1,16 @@
-import { EventCard } from "./ui/event-card";
+import { EventCard } from "./eventCard/event-card";
 import { fetchTodayGames } from "@/app/actions";
 import { Event } from "@/types/Event";
 import { Button } from "./ui/button";
+import { createClient } from "@/utils/supabase/server";
 
 //this has to be redone and included in types file
 
 export default async function GamesForToday() {
+  const {
+    data: { user },
+  } = await createClient().auth.getUser();
+
   const { data: todayEvents } = await fetchTodayGames();
 
   return (
@@ -17,17 +22,7 @@ export default async function GamesForToday() {
         <>
           <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full">
             {todayEvents.map((event: Event, index: number) =>
-              index >= 5 ? (
-                <></>
-              ) : (
-                <EventCard
-                  id={event.id}
-                  eventName={event.name}
-                  location={event.location}
-                  key={event.id}
-                  scheduledAt={event.scheduledAt}
-                />
-              )
+              index >= 5 ? <></> : <EventCard event={event} userId={user?.id} />
             )}
           </div>
         </>

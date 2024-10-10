@@ -1,4 +1,4 @@
-import { EventCard } from "@/components/ui/event-card";
+import { EventCard } from "@/components/eventCard/event-card";
 import { fetchGamesByUser } from "@/app/actions";
 import { Event } from "@/types/Event";
 
@@ -16,14 +16,7 @@ export default async function MyGames({ userId }: Props) {
         <>
           <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
             {eventResults.map((event: Event) => (
-              <EventCard
-                id={event.id}
-                eventName={event.name}
-                location={event.location}
-                key={event.id}
-                scheduledAt={event.scheduledAt}
-                myGame={true}
-              />
+              <EventCard event={event} userId={userId} />
             ))}
           </div>
         </>

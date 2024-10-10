@@ -1,10 +1,11 @@
 "use client";
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import moment from "moment";
 import { useRouter } from "next/navigation";
 import { ROUTES } from "@/lib/constants";
+import moment from "moment";
+
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 export default function SearchBar({
   searchParams,

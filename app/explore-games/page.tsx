@@ -1,9 +1,10 @@
-import { EventCard } from "@/components/ui/event-card";
+import { EventCard } from "@/components/eventCard/event-card";
 import { fetchGames } from "../actions";
 import { Event } from "@/types/Event";
 import GamesPagination from "./pagination";
 import SearchBar from "@/components/search-bar";
 import moment from "moment";
+import { createClient } from "@/utils/supabase/server";
 
 export default async function ExploreGames({
   searchParams,
@@ -15,6 +16,10 @@ export default async function ExploreGames({
     limit?: number;
   };
 }) {
+  const {
+    data: { user },
+  } = await createClient().auth.getUser();
+
   const onDate = searchParams?.onDate || "";
   const searchQuery = searchParams?.searchQuery || "";
   const page = searchParams?.page || 1;
@@ -49,13 +54,7 @@ export default async function ExploreGames({
         <>
           <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full">
             {data.map((event: Event) => (
-              <EventCard
-                id={event.id}
-                eventName={event.name}
-                location={event.location}
-                key={event.id}
-                scheduledAt={event.scheduledAt}
-              />
+              <EventCard event={event} userId={user?.id} />
             ))}
           </div>
           {nPages && nPages > 1 && (
