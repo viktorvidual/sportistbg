@@ -1,10 +1,9 @@
-import { EventCard } from "@/components/eventCard/event-card";
 import { fetchGames } from "../actions";
-import { Event } from "@/types/Event";
 import GamesPagination from "./pagination";
 import SearchBar from "@/components/search-bar";
 import moment from "moment";
 import { createClient } from "@/utils/supabase/server";
+import GamesList from "@/components/games-list";
 
 export default async function ExploreGames({
   searchParams,
@@ -52,11 +51,8 @@ export default async function ExploreGames({
       <SearchBar searchParams={{ query: searchQuery, onDate: onDate }} />
       {data && data.length > 0 ? (
         <>
-          <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full">
-            {data.map((event: Event) => (
-              <EventCard event={event} userId={user?.id} />
-            ))}
-          </div>
+          <GamesList games={data} userId={user?.id} />
+
           {nPages && nPages > 1 && (
             <GamesPagination
               onDate={onDate}

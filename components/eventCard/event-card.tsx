@@ -1,32 +1,28 @@
 import React from "react";
 import moment from "moment";
 import Link from "next/link";
-import { ROUTES } from "@/lib/constants";
 import { Button } from "../ui/button";
+import { ROUTES } from "@/lib/constants";
 import JoinEventButton from "./joinEventButton";
 import { Event } from "@/types/Event";
 
-const checkUserHasJoined = (participants: string[], userId: string) => {
-  if (participants.some((el) => el === userId)) {
-    return true;
-  }
-
-  return false;
-};
-
-export const EventCard = ({
-  event,
-  userId,
-}: {
+type Props = {
   event: Event;
   userId?: string;
-}) => {
+  updateGamesState: React.Dispatch<React.SetStateAction<Event[]>>;
+};
+
+export const EventCard = ({ event, userId, updateGamesState }: Props) => {
   const href = `${ROUTES.gameDetails}/${event.id}`;
   const time = moment(event.scheduledAt).format("LT");
   const date = moment(event.scheduledAt).format("DD/MM/YY");
 
   const userIsCreator = userId === event.creatorId;
   const userHasJoined = event.participants?.some((el) => el === userId);
+  const participants = event.participants?.length || 0;
+  const currentAmountOfPlayers =
+    event.maxPlayers - event.playersNeeded + participants;
+  const eventIsFull = currentAmountOfPlayers === event.maxPlayers;
 
   return (
     <div className="relative group">
@@ -39,7 +35,7 @@ export const EventCard = ({
           <div className="p-4 group-active:scale-95 transition-transform duration-150">
             {/* Time & Date */}
             <div className="flex flex-row justify-between">
-              <p className="text-md font-bold text-gray-600">Varna</p>
+              <p className="text-md font-bold text-gray-600">{event.city}</p>
               <p className="text-md font-bold text-gray-600">{date}</p>
               <p className="text-md font-bold text-gray-600">{time}</p>
             </div>
@@ -47,7 +43,9 @@ export const EventCard = ({
             <h3 className="text-lg font-bold text-gray-900">{event.name}</h3>
 
             <div className="flex flex-col justify-center item-center mt-2">
-              <p className="text-sm text-gray-600">6/12 Players</p>
+              <p className="text-sm text-gray-600">
+                {currentAmountOfPlayers}/{event.maxPlayers} Players
+              </p>
               <p className="text-sm text-gray-600">{event.location}</p>
             </div>
           </div>
@@ -59,7 +57,12 @@ export const EventCard = ({
         {/* {userIsCreator ? (
           <Button className="bg-black text-white">Edit Game</Button>
         ) : ( */}
-          <JoinEventButton eventId={event.id} userHasJoined={userHasJoined} />
+        <JoinEventButton
+          eventId={event.id}
+          userHasJoined={userHasJoined}
+          updateGamesState={updateGamesState}
+          userId={userId}
+        />
         {/* )} */}
       </div>
     </div>
