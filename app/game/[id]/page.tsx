@@ -1,12 +1,11 @@
-import { fetchGame } from "@/app/actions";
-import { notFound } from "next/navigation";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { buttonVariants } from "@/components/ui/button";
-import { createClient } from "@/utils/supabase/server";
-import { deleteGameAction } from "@/app/actions";
-import ConfirmActionModal from "@/components/confirm-action-modal";
+import DeleteGameButton from "./delete-game-button";
 import DateTimeWidget from "@/components/date-time-widget";
-import moment from "moment";
+
+import { createClient } from "@/utils/supabase/server";
+import { fetchGame } from "@/app/actions";
 
 export default async function Page({ params }: { params: { id: string } }) {
   const id = params.id;
@@ -22,9 +21,6 @@ export default async function Page({ params }: { params: { id: string } }) {
   } = await createClient().auth.getUser();
 
   const userIsOwner = user?.id === event?.creatorId;
-  const deleteGameWithId = deleteGameAction.bind(null, id);
-
-  const timeAndDate = moment(event.scheduledAt).format("dddd, DD/MM/YY, HH:mm");
 
   return (
     <div className="flex gap-3 flex-col items-center w-11/12 md:w-5/12 mx-auto">
@@ -62,14 +58,7 @@ export default async function Page({ params }: { params: { id: string } }) {
       {userIsOwner && (
         <div className="flex w-full gap-2 justify-center">
           {/* Modal for delete game */}
-
-          <ConfirmActionModal
-            triggerText="Delete Game"
-            title="Confirm delete"
-            description="This action cannot be undone."
-            onConfirm={deleteGameWithId}
-            loadingText="Deleting Game"
-          />
+          <DeleteGameButton gameId={id} />
           <Link
             href=""
             className={`${buttonVariants({ variant: "default" })} flex-1`}

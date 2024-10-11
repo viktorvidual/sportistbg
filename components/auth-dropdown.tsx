@@ -4,18 +4,18 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import SettingsIcon from "@mui/icons-material/Settings";
 import LogoutIcon from "@mui/icons-material/Logout";
-import { Button } from "@/components/ui/button";
 import { buttonVariants } from "@/components/ui/button";
 
 import { signOutAction } from "@/app/actions";
-import Link from "next/link";
 
 export default async function AuthDropdown() {
-  const textStyle = "font-bold";
+  const textStyle = "font-lg";
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

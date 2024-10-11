@@ -1,9 +1,11 @@
 "use client";
 import React from "react";
-import { Button } from "../ui/button";
 import { joinGame, leaveGame } from "@/app/actions";
 import { useToast } from "@/hooks/use-toast";
 import { Event } from "@/types/Event";
+import { useRouter } from "next/navigation";
+import { ROUTES } from "@/lib/constants";
+import ConfirmActionModal from "../confirm-action-modal";
 
 type Props = {
   eventId: string;
@@ -19,15 +21,24 @@ export default function JoinEventButton({
   userId,
 }: Props) {
   const { toast } = useToast();
+  const router = useRouter();
 
   const onJoinGame = async () => {
+    if (!userId) {
+      toast({
+        title: "You have to be logged in to join a game.",
+      });
+      router.push(ROUTES.SIGN_IN);
+      return;
+    }
     const { error } = await joinGame(eventId);
 
     if (error) {
-      return toast({
+      toast({
         title: "Error joining event",
         description: error.message,
       });
+      return;
     }
 
     updateGamesState((prev: Event[]) => {
@@ -35,9 +46,9 @@ export default function JoinEventButton({
 
       const updatedGames = events.map((el) => {
         if (el.id === eventId) {
-          const participants = userId
+          const participants = el?.participants
             ? [...el.participants, userId] // Ensure userId is not undefined before adding
-            : el.participants;
+            : [userId];
 
           return {
             ...el,
@@ -48,8 +59,9 @@ export default function JoinEventButton({
       });
       return updatedGames;
     });
+
     toast({
-      title: "Game Joined",
+      title: "Game Joined Successfully",
     });
   };
 
@@ -58,10 +70,11 @@ export default function JoinEventButton({
 
     if (error) {
       console.log(error);
-      return toast({
+      toast({
         title: "Error joining event",
         description: error.message,
       });
+      return;
     }
 
     updateGamesState((prev: Event[]) => {
@@ -86,31 +99,32 @@ export default function JoinEventButton({
     });
 
     toast({
-      title: "Game Left",
+      title: "Game Left Successfully",
     });
   };
+
   return (
     <>
       {userHasJoined ? (
-        <Button
-          onClick={async (e) => {
-            e.preventDefault();
-            await onLeaveGame();
-          }}
-          className="bg-black text-white"
-        >
-          Leave
-        </Button>
+        <>
+          <ConfirmActionModal
+            triggerText="Leave"
+            onConfirm={onLeaveGame}
+            title="Leave Game?"
+            description="Please confirm that you would like to leave this game."
+            loadingText="Leaving..."
+          />
+        </>
       ) : (
-        <Button
-          onClick={async (e) => {
-            e.preventDefault();
-            await onJoinGame();
-          }}
-          className="bg-black text-white"
-        >
-          Join
-        </Button>
+        <>
+          <ConfirmActionModal
+            triggerText="Join"
+            onConfirm={onJoinGame}
+            title="Join Game?"
+            description="Please confirm that you would like to join this game."
+            loadingText="Leaving..."
+          />
+        </>
       )}
     </>
   );

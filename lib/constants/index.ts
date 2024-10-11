@@ -4,6 +4,7 @@ export const DB_TABLES = {
 };
 
 export const ROUTES = {
+  SIGN_IN : "sign-in",
   createGane: "/protected/create-game",
   gameDetails: "/game",
   EXPLORE_GAMES: "explore-games",

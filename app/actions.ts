@@ -324,16 +324,15 @@ export const fetchGame = async (
   return { data: camelize(data) };
 };
 
-export const deleteGameAction = async (id: string) => {
+export const deleteGame = async (id: string) => {
   const supabase = createClient();
   const { error } = await supabase.from(DB_TABLES.events).delete().eq("id", id);
 
   if (error) {
-    console.error("Supabase Delete Error:", error);
-    return { error: "Could not delete game" };
+    return { error };
   }
 
-  return redirect("/protected");
+  return redirect("/");
 };
 
 export const joinGame = async (
