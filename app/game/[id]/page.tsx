@@ -4,8 +4,11 @@ import { buttonVariants } from "@/components/ui/button";
 import DeleteGameButton from "./delete-game-button";
 import DateTimeWidget from "@/components/date-time-widget";
 import { createClient } from "@/utils/supabase/server";
-import { fetchGame, fetchJoinedGamesByUser } from "@/app/actions/gameActions";
+import { fetchGame, fetchGameParticipants } from "@/app/actions/gameActions";
 
+const TextContainer = ({ children }: { children: React.ReactNode }) => (
+  <div className="flex w-full justify-start flex-col">{children}</div>
+);
 export default async function Page({ params }: { params: { id: string } }) {
   const id = params.id;
 
@@ -19,19 +22,28 @@ export default async function Page({ params }: { params: { id: string } }) {
     data: { user },
   } = await createClient().auth.getUser();
 
-  await fetchJoinedGamesByUser();
-
   const userIsOwner = user?.id === event?.creatorId;
+
+  const { data: players } = await fetchGameParticipants(event.participants);
 
   return (
     <div className="flex gap-3 flex-col items-center w-11/12 md:w-5/12 mx-auto">
-      <h1 className="text-2xl font-bold">{event.name}</h1>
-      <h2 className="text-lg">
-        {event.location}, {event.city}
-      </h2>
-
+      <TextContainer>
+        <h1 className="text-2xl font-bold">{event.name}</h1>
+        <h2 className="text-lg">
+          {event.location}, {event.city}
+        </h2>
+      </TextContainer>
       <DateTimeWidget timeStamp={event.scheduledAt} />
 
+      <TextContainer>
+        <h2 className="text-2xl font-bold">Players</h2>
+        {players?.length > 0 && players.map((player) => <p>{player.email}</p>)}
+      </TextContainer>
+
+      <TextContainer>
+        <h2 className="text-2xl font-bold">Map</h2>
+      </TextContainer>
       {/* Google Maps For Mobile */}
       <div className="w-full block md:hidden overflow-hidden rounded">
         <iframe

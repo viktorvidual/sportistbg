@@ -6,6 +6,7 @@ import { DB_TABLES } from "../../lib/constants";
 import moment from "moment";
 import camelize from "camelize-ts";
 import { Event } from "@/types/Event";
+import { User } from "@/types/User";
 import { SupabaseError } from "@/types/errors";
 
 export const createGame = async (gameData: {
@@ -140,7 +141,7 @@ export const fetchGamesCreatedByUser = async (
 }> => {
   const supabase = createClient();
   const { data, error } = await supabase
-    .from(DB_TABLES.events)
+    .from(DB_TABLES.users)
     .select()
     .eq("creator_id", userId)
     .order("scheduled_at", { ascending: true });
@@ -153,18 +154,26 @@ export const fetchGamesCreatedByUser = async (
   return { data: camelize(data) };
 };
 
-export const fetchJoinedGamesByUser = async (participants?: string[]) => {};
+export const fetchJoinedGamesByUser = async () => {};
 
-export const fetchGameParticipants = async () => {
+export const fetchGameParticipants = async (
+  participants: string[]
+): Promise<{
+  data: User[] | [];
+  error: SupabaseError | null;
+}> => {
   const supabase = createClient();
 
-  const {
-    data: { users },
-    error,
-  } = await supabase.auth.admin.listUsers();
+  const { data, error } = await supabase
+    .from(DB_TABLES.users)
+    .select()
+    .in("id", participants);
 
-  console.log(users);
-  console.log(error);
+  if (error) {
+    return { data: [], error };
+  }
+
+  return { data, error: null };
 };
 
 export const fetchGame = async (
