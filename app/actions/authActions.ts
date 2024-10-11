@@ -3,6 +3,7 @@ import { encodedRedirect } from "@/utils/utils";
 import { createClient } from "@/utils/supabase/server";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { DB_TABLES } from "@/lib/constants";
 
 export const signUpAction = async (formData: FormData) => {
   const email = formData.get("email")?.toString();
@@ -39,13 +40,37 @@ export const signInAction = async (formData: FormData) => {
   const password = formData.get("password") as string;
   const supabase = createClient();
 
-  const { error } = await supabase.auth.signInWithPassword({
+  const {
+    error,
+    data: { user },
+  } = await supabase.auth.signInWithPassword({
     email,
     password,
   });
 
   if (error) {
     return encodedRedirect("error", "/sign-in", error.message);
+  }
+
+  const { data, error: readError } = await supabase
+    .from("user-profiles")
+    .select()
+    .eq("id", user?.id);
+
+  if (readError) {
+    return encodedRedirect("error", "/sign-in", readError.message);
+  }
+
+  if (data?.length === 0) {
+    const { error: writeError } = await supabase.from("user-profiles").insert({
+      id: user?.id,
+      email: user?.email,
+      user_name: user?.email,
+    });
+
+    if (writeError) {
+      return encodedRedirect("error", "/sign-in", writeError.message);
+    }
   }
 
   return redirect("/protected");
@@ -137,4 +162,3 @@ export const signOutUserAfterAuthError = async () => {
     "You must be logged in to access this page"
   );
 };
-

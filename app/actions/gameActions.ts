@@ -132,7 +132,7 @@ export const fetchTodayGames = async () => {
   return { data: camelize(data) };
 };
 
-export const fetchGamesByUser = async (
+export const fetchGamesCreatedByUser = async (
   userId: string
 ): Promise<{
   data?: Event[];
@@ -151,6 +151,20 @@ export const fetchGamesByUser = async (
   }
 
   return { data: camelize(data) };
+};
+
+export const fetchJoinedGamesByUser = async (participants?: string[]) => {};
+
+export const fetchGameParticipants = async () => {
+  const supabase = createClient();
+
+  const {
+    data: { users },
+    error,
+  } = await supabase.auth.admin.listUsers();
+
+  console.log(users);
+  console.log(error);
 };
 
 export const fetchGame = async (

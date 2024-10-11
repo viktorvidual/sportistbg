@@ -1,4 +1,4 @@
-import { fetchGamesByUser } from "@/app/actions/gameActions";
+import { fetchGamesCreatedByUser } from "@/app/actions/gameActions";
 import GamesList from "@/components/games-list";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -7,7 +7,7 @@ type Props = {
 };
 
 export default async function MyGames({ userId }: Props) {
-  const { data: eventResults } = await fetchGamesByUser(userId);
+  const { data: eventResults } = await fetchGamesCreatedByUser(userId);
 
   return (
     <>

@@ -4,7 +4,7 @@ import { buttonVariants } from "@/components/ui/button";
 import DeleteGameButton from "./delete-game-button";
 import DateTimeWidget from "@/components/date-time-widget";
 import { createClient } from "@/utils/supabase/server";
-import { fetchGame } from "@/app/actions/gameActions";
+import { fetchGame, fetchJoinedGamesByUser } from "@/app/actions/gameActions";
 
 export default async function Page({ params }: { params: { id: string } }) {
   const id = params.id;
@@ -18,6 +18,8 @@ export default async function Page({ params }: { params: { id: string } }) {
   const {
     data: { user },
   } = await createClient().auth.getUser();
+
+  await fetchJoinedGamesByUser();
 
   const userIsOwner = user?.id === event?.creatorId;
 
