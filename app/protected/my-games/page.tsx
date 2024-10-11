@@ -1,6 +1,6 @@
 import MyGames from "./my-games";
 import { createClient } from "@/utils/supabase/server";
-import { signOutUserAfterAuthError } from "@/app/actions";
+import { signOutUserAfterAuthError } from "@/app/actions/authActions";
 
 export default async function MyGamesPage() {
   const {

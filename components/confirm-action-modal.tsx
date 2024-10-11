@@ -1,5 +1,7 @@
 "use client";
 import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
+
 import { QueryError } from "@supabase/supabase-js";
 
 import {
@@ -13,10 +15,8 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-
 import { Button } from "@/components/ui/button";
 import Loader from "./loader";
-import { useToast } from "@/hooks/use-toast";
 
 type Props = {
   triggerText: string;

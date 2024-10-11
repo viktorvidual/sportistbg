@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { createGameAction } from "@/app/actions";
+import { createGame } from "@/app/actions/gameActions";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import moment from "moment";
@@ -25,15 +25,16 @@ export default function Page() {
   const onComplete = async () => {
     try {
       setIsLoading(true);
-      const { error } = await createGameAction({
-        name,
-        date,
-        time,
-        location,
-        maxPlayers,
-        playersNeeded,
-        city,
-      }) || {}; 
+      const { error } =
+        (await createGame({
+          name,
+          date,
+          time,
+          location,
+          maxPlayers,
+          playersNeeded,
+          city,
+        })) || {};
 
       if (error) {
         throw new Error(error.message);

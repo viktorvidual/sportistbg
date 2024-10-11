@@ -3,9 +3,8 @@ import { notFound } from "next/navigation";
 import { buttonVariants } from "@/components/ui/button";
 import DeleteGameButton from "./delete-game-button";
 import DateTimeWidget from "@/components/date-time-widget";
-
 import { createClient } from "@/utils/supabase/server";
-import { fetchGame } from "@/app/actions";
+import { fetchGame } from "@/app/actions/gameActions";
 
 export default async function Page({ params }: { params: { id: string } }) {
   const id = params.id;
