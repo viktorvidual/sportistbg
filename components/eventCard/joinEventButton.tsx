@@ -6,6 +6,7 @@ import { Event } from "@/types/Event";
 import { useRouter } from "next/navigation";
 import { ROUTES } from "@/lib/constants";
 import ConfirmActionModal from "../confirm-action-modal";
+import { produce } from "immer";
 
 type Props = {
   eventId: string;
@@ -31,6 +32,7 @@ export default function JoinEventButton({
       router.push(ROUTES.SIGN_IN);
       return;
     }
+
     const { error } = await joinGame(eventId);
 
     if (error) {
@@ -41,24 +43,16 @@ export default function JoinEventButton({
       return;
     }
 
-    updateGamesState((prev: Event[]) => {
-      const events = [...prev];
-
-      const updatedGames = events.map((el) => {
-        if (el.id === eventId) {
-          const participants = el?.participants
-            ? [...el.participants, userId] // Ensure userId is not undefined before adding
-            : [userId];
-
-          return {
-            ...el,
-            participants,
-          };
+    updateGamesState(
+      produce((draft: Event[]) => {
+        const event = draft.find((el) => el.id === eventId);
+        if (event) {
+          event.participants = event.participants
+            ? [...event.participants, userId]
+            : [userId]; // Ensure userId is not undefined before adding
         }
-        return el;
-      });
-      return updatedGames;
-    });
+      })
+    );
 
     toast({
       title: "Game Joined Successfully",
@@ -77,26 +71,16 @@ export default function JoinEventButton({
       return;
     }
 
-    updateGamesState((prev: Event[]) => {
-      const events = [...prev];
-
-      const updatedGames = events.map((el) => {
-        // Fix the comparison here (el.id === eventId)
-        if (el.id === eventId) {
-          // Fix the filter logic to return a boolean value
-          const participants = el.participants.filter(
-            (participant) => participant !== userId
+    updateGamesState(
+      produce((draft: Event[]) => {
+        const event = draft.find((el) => el.id === eventId);
+        if (event) {
+          event.participants = event?.participants.filter(
+            (el) => el !== userId
           );
-
-          return {
-            ...el,
-            participants: participants,
-          };
         }
-        return el;
-      });
-      return updatedGames;
-    });
+      })
+    );
 
     toast({
       title: "Game Left Successfully",

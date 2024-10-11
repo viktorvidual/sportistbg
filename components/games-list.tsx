@@ -4,7 +4,7 @@ import { Event } from "@/types/Event";
 import { EventCard } from "./eventCard/event-card";
 
 type Props = {
-  games: Event[];
+  games: Event[] | [];
   userId?: string;
 };
 
