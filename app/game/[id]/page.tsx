@@ -4,7 +4,7 @@ import { buttonVariants } from "@/components/ui/button";
 import DeleteGameButton from "./delete-game-button";
 import DateTimeWidget from "@/components/date-time-widget";
 import { createClient } from "@/utils/supabase/server";
-import { fetchGame, fetchGameParticipants } from "@/app/actions/gameActions";
+import { fetchGame, fetchGameParticipants } from "@/actions/gameActions";
 
 const TextContainer = ({ children }: { children: React.ReactNode }) => (
   <div className="flex w-full justify-start flex-col">{children}</div>

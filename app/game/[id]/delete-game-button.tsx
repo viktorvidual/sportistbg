@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { deleteGame } from "@/app/actions/gameActions";
+import { deleteGame } from "@/actions/gameActions";
 import ConfirmActionModal from "@/components/confirm-action-modal";
 
 type Props = {

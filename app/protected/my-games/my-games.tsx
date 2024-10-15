@@ -1,4 +1,4 @@
-import { fetchGamesCreatedByUser } from "@/app/actions/gameActions";
+import { fetchGamesCreatedByUser } from "@/actions/gameActions";
 import GamesList from "@/components/games-list";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 

@@ -10,7 +10,7 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import SettingsIcon from "@mui/icons-material/Settings";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { buttonVariants } from "@/components/ui/button";
-import { signOutAction } from "@/app/actions/authActions";
+import { signOutAction } from "@/actions/authActions";
 
 export default async function AuthDropdown() {
   const textStyle = "font-lg";

@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { joinGame, leaveGame } from "@/app/actions/gameActions";
+import { joinGame, leaveGame } from "@/actions/gameActions";
 import { useToast } from "@/hooks/use-toast";
 import { Event } from "@/types/Event";
 import { useRouter } from "next/navigation";

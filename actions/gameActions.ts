@@ -2,7 +2,7 @@
 import { encodedRedirect } from "@/utils/utils";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
-import { DB_TABLES } from "../../lib/constants";
+import { DB_TABLES } from "@/lib/constants";
 import moment from "moment";
 import camelize from "camelize-ts";
 import { Event } from "@/types/Event";

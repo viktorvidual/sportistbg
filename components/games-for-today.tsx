@@ -1,4 +1,4 @@
-import { fetchTodayGames } from "@/app/actions/gameActions";
+import { fetchTodayGames } from "@/actions/gameActions";
 import { Button } from "./ui/button";
 import { createClient } from "@/utils/supabase/server";
 import GamesList from "./games-list";

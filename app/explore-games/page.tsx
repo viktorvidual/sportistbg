@@ -1,4 +1,4 @@
-import { fetchGames } from "../actions/gameActions";
+import { fetchGames } from "@/actions/gameActions";
 import GamesPagination from "./pagination";
 import SearchBar from "@/components/search-bar";
 import moment from "moment";
