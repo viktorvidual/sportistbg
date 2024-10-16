@@ -110,29 +110,6 @@ export const fetchGames = async ({
   return { data: camelize(data), nPages };
 };
 
-export const fetchTodayGames = async () => {
-  const supabase = createClient();
-
-  // Define the start and end of the day using moment
-  const startOfDay = moment().startOf("day").toISOString();
-  const endOfDay = moment().endOf("day").toISOString();
-
-  const { data, error } = await supabase
-    .from(DB_TABLES.events)
-    .select()
-    .gte("scheduled_at", startOfDay)
-    .lte("scheduled_at", endOfDay)
-    .order("scheduled_at", { ascending: true })
-    .limit(5);
-
-  if (error) {
-    console.error("Supabase Fetch Error:", error);
-    return { error: "Could not fetch events" };
-  }
-
-  return { data: camelize(data) };
-};
-
 export const fetchGamesCreatedByUser = async (
   userId: string
 ): Promise<{
@@ -141,7 +118,7 @@ export const fetchGamesCreatedByUser = async (
 }> => {
   const supabase = createClient();
   const { data, error } = await supabase
-    .from(DB_TABLES.users)
+    .from(DB_TABLES.events)
     .select()
     .eq("creator_id", userId)
     .order("scheduled_at", { ascending: true });
@@ -154,7 +131,30 @@ export const fetchGamesCreatedByUser = async (
   return { data: camelize(data) };
 };
 
-export const fetchJoinedGamesByUser = async () => {};
+export const fetchJoinedGamesByUser = async (
+  userId: string
+): Promise<{
+  data: Event[];
+  error: SupabaseError | null;
+}> => {
+  const supabase = createClient();
+
+  const { data, error } = await supabase
+    .from(DB_TABLES.eventUsers)
+    .select(`events ( * )`)
+    .eq("user_id", userId);
+
+  if (error) {
+    return {
+      data: [],
+      error: error,
+    };
+  }
+
+  const events = data.map((el: { events: any }) => el.events);
+
+  return { data: events, error: null };
+};
 
 export const fetchGameParticipants = async (
   participants: string[]
