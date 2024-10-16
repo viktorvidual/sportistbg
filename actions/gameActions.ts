@@ -8,6 +8,7 @@ import camelize from "camelize-ts";
 import { Event } from "@/types/Event";
 import { User } from "@/types/User";
 import { SupabaseError } from "@/types/errors";
+import { revalidatePath } from "next/cache";
 
 export const createGame = async (gameData: {
   name: string;
@@ -113,7 +114,7 @@ export const fetchGames = async ({
 export const fetchGamesCreatedByUser = async (
   userId: string
 ): Promise<{
-  data?: Event[];
+  data: Event[];
   error?: string;
 }> => {
   const supabase = createClient();
@@ -125,7 +126,7 @@ export const fetchGamesCreatedByUser = async (
 
   if (error) {
     console.error("Supabase Fetch Error:", error);
-    return { error: "Could not fetch events" };
+    return { data: [], error: "Could not fetch events" };
   }
 
   return { data: camelize(data) };
@@ -269,6 +270,8 @@ export const joinGame = async (
     }
   }
 
+  revalidatePath("protected/my-games");
+
   return { error: null };
 };
 
@@ -331,6 +334,8 @@ export const leaveGame = async (
       return { error: updateError };
     }
   }
+
+  revalidatePath("protected/my-games");
 
   return { error: null };
 };
