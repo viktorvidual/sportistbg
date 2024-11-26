@@ -73,7 +73,6 @@ export default function AuthDropdown() {
           ))}
           <form
             action={signOutAction}
-            method="post"
             className="mt-1 pt-1 border-t border-gray-200 dark:border-gray-600"
           >
             <Button

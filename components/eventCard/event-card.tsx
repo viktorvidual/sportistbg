@@ -1,10 +1,10 @@
 import React from "react";
 import moment from "moment";
 import Link from "next/link";
-import { Button } from "../ui/button";
 import { ROUTES } from "@/lib/constants";
 import JoinEventButton from "./joinEventButton";
 import { Event } from "@/types/Event";
+import Loader from "../loader";
 
 type Props = {
   event: Event;

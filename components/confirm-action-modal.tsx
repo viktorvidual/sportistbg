@@ -55,6 +55,7 @@ export default function ConfirmActionModal({
         title: successMessage,
       });
     }
+
     setIsLoading(false);
   };
 
@@ -62,7 +63,11 @@ export default function ConfirmActionModal({
     <>
       <AlertDialog>
         <AlertDialogTrigger asChild>
-          <Button className="flex-1">{triggerText}</Button>
+          {isLoading ? (
+            <Loader />
+          ) : (
+            <Button className="flex-1">{triggerText}</Button>
+          )}
         </AlertDialogTrigger>
         <AlertDialogContent className="w-10/12 rounded">
           {isLoading ? (
@@ -88,7 +93,6 @@ export default function ConfirmActionModal({
           )}
         </AlertDialogContent>
       </AlertDialog>
-      {isLoading && <Loader />}
     </>
   );
 }
